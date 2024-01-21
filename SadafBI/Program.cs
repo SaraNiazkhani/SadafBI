@@ -49,34 +49,36 @@ namespace SadafBI
         }
         static void SaveCustomersToDatabase(List<CustomersModel> customers)
         {
-            string connectionString = "Data Source=DESKTOP-G1PGSB0;Initial Catalog=SadafBI;Integrated Security=True";
+            string connectionString = "Data Source=YourServerName;Initial Catalog=YourDatabaseName;Integrated Security=True";
 
-            using SqlConnection connection = new SqlConnection(connectionString);
-            connection.Open();
-
-            foreach (var customer in customers)
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                // ایجاد دستور SQL برای درج اطلاعات مشتری در جدول
-                string sql = "INSERT INTO Customers (customerId, nationalCode, companyName, firstName, lastName, ...)" +
-                             " VALUES (@CustomerId, @NationalCode, @CompanyName, @FirstName, @LastName, ...)" +
-                             " ON DUPLICATE KEY UPDATE nationalCode = @NationalCode, companyName = @CompanyName, ...";
+                connection.Open();
 
-                using (SqlCommand command = new SqlCommand(sql, connection))
+                foreach (var customer in customers)
                 {
-                    // پارامترها را به دستور اضافه کنید
-                    command.Parameters.AddWithValue("@CustomerId", customer.customerId);
-                    command.Parameters.AddWithValue("@NationalCode", customer.nationalCode);
-                    command.Parameters.AddWithValue("@CompanyName", customer.companyName);
-                    command.Parameters.AddWithValue("@FirstName", customer.firstName);
-                    command.Parameters.AddWithValue("@LastName", customer.lastName);
-                    // ...
+                    // ایجاد دستور SQL برای درج اطلاعات مشتری در جدول
+                    string sql = "INSERT INTO Customers (customerId, nationalCode, companyName, firstName, lastName, ...)" +
+                                 " VALUES (@CustomerId, @NationalCode, @CompanyName, @FirstName, @LastName, ...)" +
+                                 " ON DUPLICATE KEY UPDATE nationalCode = @NationalCode, companyName = @CompanyName, ...";
 
-                    // اجرای دستور SQL
-                    command.ExecuteNonQuery();
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        // پارامترها را به دستور اضافه کنید
+                        command.Parameters.AddWithValue("@CustomerId", customer.customerId);
+                        command.Parameters.AddWithValue("@NationalCode", customer.nationalCode);
+                        command.Parameters.AddWithValue("@CompanyName", customer.companyName);
+                        command.Parameters.AddWithValue("@FirstName", customer.firstName);
+                        command.Parameters.AddWithValue("@LastName", customer.lastName);
+                        // ...
+
+                        // اجرای دستور SQL
+                        command.ExecuteNonQuery();
+                    }
                 }
-            }
 
-            connection.Close();
+                connection.Close();
+            }
         }
     }
 }
