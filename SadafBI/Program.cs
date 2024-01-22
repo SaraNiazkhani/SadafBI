@@ -1,86 +1,49 @@
-﻿using SadafBI.Models;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using SadafBI.Models; // لازم است که مدل‌ها را به اینجا اضافه کنید
-using System.Data.SqlClient;
-namespace SadafBI
+﻿// See https://aka.ms/new-console-template for more information
+using SadafBI.Data;
+using SadafBI.Models;
+using System.Net.Http.Json;
+using System;
+
+namespace SadafBI // Note: actual namespace depends on the project name.
 {
-     class Program
+    public class Program
     {
-        static async Task Main()
+        public static void Main()
         {
-            try
-            {
-                // 1. ارسال درخواست به API برای دریافت لیست مشتریان
-                List<CustomersModel> customers = await GetCustomersFromApi("YourApiUrl", "YourApiParameters");
-
-                // 2. ذخیره لیست مشتریان در پایگاه داده
-                SaveCustomersToDatabase(customers);
-
-                Console.WriteLine("Data has been successfully retrieved from API and saved to the database.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-            }
+            MainSync();
         }
-        static async Task<List<CustomersModel>> GetCustomersFromApi(string apiUrl, string apiParameters)
+        static void MainSync()
         {
-            using (HttpClient client = new HttpClient())
+            using (var httpClient = new HttpClient())
             {
-                // اضافه کردن پارامترهای API به URL
-                string requestUrl = $"{apiUrl}?{apiParameters}";
-
-                // ارسال درخواست GET به API
-                HttpResponseMessage response = await client.GetAsync(requestUrl);
-
-                // بررسی موفقیت درخواست
-                response.EnsureSuccessStatusCode();
-
-                // دریافت محتوای JSON از API
-                string responseBody = await response.Content.ReadAsStringAsync();
-
-                // تبدیل محتوا به لیست مشتریان
-                CustomerListResponse customerListResponse = JsonConvert.DeserializeObject<CustomerListResponse>(responseBody);
-                return customerListResponse.Result;
-            }
-        }
-        static void SaveCustomersToDatabase(List<CustomersModel> customers)
-        {
-            string connectionString = "Data Source=YourServerName;Initial Catalog=YourDatabaseName;Integrated Security=True";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                foreach (var customer in customers)
+                httpClient.DefaultRequestHeaders.Add("X-CLIENT-TOKEN", "543ae258-b863-478b-b07c-91ea1478f70f");
+                using (var dbContext = new DataContext())
                 {
-                    // ایجاد دستور SQL برای درج اطلاعات مشتری در جدول
-                    string sql = "INSERT INTO Customers (customerId, nationalCode, companyName, firstName, lastName, ...)" +
-                                 " VALUES (@CustomerId, @NationalCode, @CompanyName, @FirstName, @LastName, ...)" +
-                                 " ON DUPLICATE KEY UPDATE nationalCode = @NationalCode, companyName = @CompanyName, ...";
+                    var pageSize = 100;
+                    var pageNumber = 1;
 
-                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    // var x = httpClient.GetAsync("https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1400/02/01&creationDateFrom=1400/02/20&size=100&page=1").Result;
+
+                    var responseTask = httpClient.GetFromJsonAsync<CustomerListResponse>("https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1400/02/01&creationDateFrom=1400/02/20&size=100&page=1");
+                    responseTask.Wait();
+
+                    var response = responseTask.Result; // بازیابی نتیجه تسک
+
+                    if (response != null)
                     {
-                        // پارامترها را به دستور اضافه کنید
-                        command.Parameters.AddWithValue("@CustomerId", customer.customerId);
-                        command.Parameters.AddWithValue("@NationalCode", customer.nationalCode);
-                        command.Parameters.AddWithValue("@CompanyName", customer.companyName);
-                        command.Parameters.AddWithValue("@FirstName", customer.firstName);
-                        command.Parameters.AddWithValue("@LastName", customer.lastName);
-                        // ...
+                        dbContext.Customers.AddRange(response.Result);
 
-                        // اجرای دستور SQL
-                        command.ExecuteNonQuery();
+                        var result = dbContext.SaveChanges();
+
+                        Console.WriteLine("اطلاعات با موفقیت به دیتابیس افزوده شد.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("درخواست API ناموفق بود.");
                     }
                 }
-
-                connection.Close();
             }
         }
     }
 }
-
 

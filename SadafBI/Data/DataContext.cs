@@ -8,12 +8,25 @@ using System.Threading.Tasks;
 
 namespace SadafBI.Data
 {
-    public class DataContext: DbContext
+    public class DataContext : DbContext
     {
-        public DbSet<CustomersModel> Customers { get; set; }
+       
+        public DbSet<SqlCustomerList> Customers { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=.;Database=SadafBI;");
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseSqlServer("Server=.;Database=SadafBI;Trusted_Connection=True;");
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+           modelBuilder.Entity<SqlCustomerList>().HasNoKey();
         }
     }
 }
+
+
+
+       
+
+ 
