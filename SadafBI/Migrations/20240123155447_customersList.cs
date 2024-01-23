@@ -4,7 +4,7 @@
 
 namespace SadafBI.Migrations
 {
-    public partial class customer : Migration
+    public partial class customersList : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,8 @@ namespace SadafBI.Migrations
                 name: "Customers",
                 columns: table => new
                 {
-                    customerId = table.Column<int>(type: "int", nullable: false),
+                    customerId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     nationalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     companyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     firstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -80,11 +81,82 @@ namespace SadafBI.Migrations
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_Customers", x => x.customerId);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Responses",
+                columns: table => new
+                {
+                    pageSize = table.Column<int>(type: "int", nullable: false),
+                    pageNumber = table.Column<int>(type: "int", nullable: false),
+                    offset = table.Column<int>(type: "int", nullable: false),
+                    total = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Customergroups",
+                columns: table => new
+                {
+                    customerGroupId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    customerGroupName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SqlCustomerListcustomerId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customergroups", x => x.customerGroupId);
+                    table.ForeignKey(
+                        name: "FK_Customergroups_Customers_SqlCustomerListcustomerId",
+                        column: x => x.SqlCustomerListcustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "customerId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Domains",
+                columns: table => new
+                {
+                    domainId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    domainName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SqlCustomerListcustomerId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Domains", x => x.domainId);
+                    table.ForeignKey(
+                        name: "FK_Domains_Customers_SqlCustomerListcustomerId",
+                        column: x => x.SqlCustomerListcustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "customerId");
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customergroups_SqlCustomerListcustomerId",
+                table: "Customergroups",
+                column: "SqlCustomerListcustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Domains_SqlCustomerListcustomerId",
+                table: "Domains",
+                column: "SqlCustomerListcustomerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Customergroups");
+
+            migrationBuilder.DropTable(
+                name: "Domains");
+
+            migrationBuilder.DropTable(
+                name: "Responses");
+
             migrationBuilder.DropTable(
                 name: "Customers");
         }

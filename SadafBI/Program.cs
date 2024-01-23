@@ -1,67 +1,54 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System;
-using System.Net.Http.Json;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http;
+using Newtonsoft.Json;
 using SadafBI.Data;
 using SadafBI.Models;
+using System.Threading.Tasks;
 
 namespace SadafBI
 {
-    class Program
+    public class Program
     {
-        static void Main()
+        public static async Task Main()
         {
-            // تنظیمات اتصال به دیتابیس را بخوانید
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json") // فایل تنظیمات شما
-                .Build();
-
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
-
-            // ایجاد خدمات
-            var serviceProvider = new ServiceCollection()
-                .AddDbContext<DataContext>(options => options.UseSqlServer(connectionString))
-                .BuildServiceProvider();
-
-            // دریافت یک instance از DbContext
-            using (var dbContext = serviceProvider.GetService<DataContext>())
-            {
-                // اطلاعات از API گرفته می‌شوند
-                var customerList = GetCustomerListFromApi();
-
-                // اطلاعات در دیتابیس ذخیره می‌شوند
-                if (customerList != null && customerList.result != null)
-                {
-                    dbContext.Customers.AddRange(customerList.result);
-                    dbContext.SaveChanges();
-                    Console.WriteLine("اطلاعات با موفقیت به دیتابیس افزوده شد.");
-                }
-                else
-                {
-                    Console.WriteLine("API response is empty or does not contain the expected structure.");
-                }
-            }
+            await MainAsync();
         }
 
-        static CustomerListResponse GetCustomerListFromApi()
+        static async Task MainAsync()
         {
-            // اتصال به API و دریافت اطلاعات
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Add("X-CLIENT-TOKEN", "543ae258-b863-478b-b07c-91ea1478f70f");
 
-                var response = httpClient.GetFromJsonAsync<CustomerListResponse>("https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1400/02/01&creationDateFrom=1400/02/20&size=100&page=1").Result;
+                // اطلاعات را به صورت غیرهمزمان دریافت کنید
+                var response = await httpClient.GetAsync("https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1400/02/01&creationDateFrom=1400/02/20&size=100&page=1");
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return response.Content.ReadFromJsonAsync<CustomerListResponse>().Result;
-                }
+                    // اطلاعات را از رشته به مدل مناسب تبدیل کنید
+                    var responseString = await response.Content.ReadAsStringAsync();
+                    var customerListResponse = JsonConvert.DeserializeObject<CustomerListResponse>(responseString);
 
-                Console.WriteLine($"API request failed with status code: {response.StatusCode}");
-                return null;
+                    if (customerListResponse != null)
+                    {
+                        using (var dbContext = new DataContext())
+                        {
+                            dbContext.Customers.AddRange(customerListResponse.Result);
+                            var result = await dbContext.SaveChangesAsync();
+                            Console.WriteLine("اطلاعات با موفقیت به دیتابیس افزوده شد.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("خطا در دیسریالایز اطلاعات.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"خطا: {response.StatusCode}");
+                }
             }
         }
     }

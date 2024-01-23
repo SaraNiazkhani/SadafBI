@@ -22,8 +22,53 @@ namespace SadafBI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("SadafBI.Models.SqlCustomerList", b =>
+            modelBuilder.Entity("CustomerListResponse", b =>
                 {
+                    b.Property<int>("offset")
+                        .HasColumnType("int");
+
+                    b.Property<int>("pageNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("pageSize")
+                        .HasColumnType("int");
+
+                    b.Property<int>("total")
+                        .HasColumnType("int");
+
+                    b.ToTable("Responses");
+                });
+
+            modelBuilder.Entity("SqlCustomergroup", b =>
+                {
+                    b.Property<int>("customerGroupId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("customerGroupId"), 1L, 1);
+
+                    b.Property<int?>("SqlCustomerListcustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("customerGroupName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("customerGroupId");
+
+                    b.HasIndex("SqlCustomerListcustomerId");
+
+                    b.ToTable("Customergroups");
+                });
+
+            modelBuilder.Entity("SqlCustomerList", b =>
+                {
+                    b.Property<int>("customerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("customerId"), 1L, 1);
+
                     b.Property<string>("accountNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -103,9 +148,6 @@ namespace SadafBI.Migrations
 
                     b.Property<long>("credit")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("customerId")
-                        .HasColumnType("int");
 
                     b.Property<string>("customerIdentity")
                         .IsRequired()
@@ -260,7 +302,52 @@ namespace SadafBI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.HasKey("customerId");
+
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("SqlDomain", b =>
+                {
+                    b.Property<int>("domainId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("domainId"), 1L, 1);
+
+                    b.Property<int?>("SqlCustomerListcustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("domainName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("domainId");
+
+                    b.HasIndex("SqlCustomerListcustomerId");
+
+                    b.ToTable("Domains");
+                });
+
+            modelBuilder.Entity("SqlCustomergroup", b =>
+                {
+                    b.HasOne("SqlCustomerList", null)
+                        .WithMany("customerGroups")
+                        .HasForeignKey("SqlCustomerListcustomerId");
+                });
+
+            modelBuilder.Entity("SqlDomain", b =>
+                {
+                    b.HasOne("SqlCustomerList", null)
+                        .WithMany("domains")
+                        .HasForeignKey("SqlCustomerListcustomerId");
+                });
+
+            modelBuilder.Entity("SqlCustomerList", b =>
+                {
+                    b.Navigation("customerGroups");
+
+                    b.Navigation("domains");
                 });
 #pragma warning restore 612, 618
         }

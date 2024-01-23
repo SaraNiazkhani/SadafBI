@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SadafBI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +10,10 @@ namespace SadafBI.Data
     public class DataContext : DbContext
     {
        
-        public DbSet<Result> Customers { get; set; }
+        public DbSet<SqlCustomerList> Customers { get; set; }
+        public DbSet<SqlCustomergroup> Customergroups { get; set; }
+        public DbSet<SqlDomain> Domains { get; set; }
+        public DbSet<CustomerListResponse> Responses { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -20,7 +22,7 @@ namespace SadafBI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-           modelBuilder.Entity<Result>().HasNoKey();
+           modelBuilder.Entity<CustomerListResponse>().HasNoKey();
         }
     }
 }
