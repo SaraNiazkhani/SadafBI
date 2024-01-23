@@ -11,7 +11,7 @@ namespace SadafBI.Data
     public class DataContext : DbContext
     {
        
-        public DbSet<SqlCustomerList> Customers { get; set; }
+        public DbSet<Result> Customers { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -20,7 +20,7 @@ namespace SadafBI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-           modelBuilder.Entity<SqlCustomerList>().HasNoKey();
+           modelBuilder.Entity<Result>().HasNoKey();
         }
     }
 }

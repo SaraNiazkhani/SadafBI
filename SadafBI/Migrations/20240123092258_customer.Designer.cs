@@ -12,7 +12,7 @@ using SadafBI.Data;
 namespace SadafBI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240122145228_customer")]
+    [Migration("20240123092258_customer")]
     partial class customer
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
