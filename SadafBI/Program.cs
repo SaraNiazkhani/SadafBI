@@ -1,58 +1,355 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using System;
-using System.Net.Http;
-using Newtonsoft.Json;
-using SadafBI.Data;
+﻿using SadafBI.Data;
 using SadafBI.Models;
-using System.Threading.Tasks;
+using System.Net.Http.Json;
+using System;
+using RestSharp;
+using System.Net;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace SadafBI
 {
-    public class Program
+    class Program
     {
-        public static async Task Main()
+        static void Main(string[] args)
         {
-            await MainAsync();
-        }
 
-        static async Task MainAsync()
-        {
-            using (var httpClient = new HttpClient())
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("X-CLIENT-TOKEN", "b2d0470a-39a2-4310-a0b7-3a9f00309deb");
+            Console.WriteLine("Calling Web API...");
+            var responseTask = client.GetAsync("https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1400/02/01&creationDateFrom=1400/02/20&size=100&page=1");
+            responseTask.Wait();
+            if (responseTask.IsCompleted)
             {
-                httpClient.DefaultRequestHeaders.Add("X-CLIENT-TOKEN", "543ae258-b863-478b-b07c-91ea1478f70f");
+                var result = responseTask.Result;
+                
+                result.EnsureSuccessStatusCode();
 
-                // اطلاعات را به صورت غیرهمزمان دریافت کنید
-                var response = await httpClient.GetAsync("https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1400/02/01&creationDateFrom=1400/02/20&size=100&page=1");
+                var responseContent = result.Content.ReadAsStringAsync().Result;
+                var apiResponse = JsonConvert.DeserializeObject<CustomerListResponse>(responseContent);
 
-                if (response.IsSuccessStatusCode)
+                // حالا می‌توانید از داده‌های دیسریالایز شده استفاده کنید
+                var customerList = apiResponse?.CustomerList;
+
+                if (customerList != null && customerList.Count > 0)
                 {
-                    // اطلاعات را از رشته به مدل مناسب تبدیل کنید
-                    var responseString = await response.Content.ReadAsStringAsync();
-                    var customerListResponse = JsonConvert.DeserializeObject<CustomerListResponse>(responseString);
-
-                    if (customerListResponse != null)
+                    foreach (var customer in customerList)
                     {
-                        using (var dbContext = new DataContext())
-                        {
-                            dbContext.Customers.AddRange(customerListResponse.Result);
-                            var result = await dbContext.SaveChangesAsync();
-                            Console.WriteLine("اطلاعات با موفقیت به دیتابیس افزوده شد.");
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("خطا در دیسریالایز اطلاعات.");
+                        Console.WriteLine($"Customer ID: {customer.customerId}, National Code: {customer.nationalCode}");
                     }
                 }
                 else
                 {
-                    Console.WriteLine($"خطا: {response.StatusCode}");
+                    Console.WriteLine("No valid data to process.");
                 }
+
+                Console.ReadLine();
             }
         }
     }
 }
+
+
+           
+
+   
+
+
+              
+
+                // استفاده از Json.NET برای دیسریالایز کردن
+                
+
+                // حالا می‌توانید از داده‌های دیسریالایز شده استفاده کنید
+             
+    
+
+
+//using SadafBI.Data;
+//using SadafBI.Models;
+//using System;
+//using System.Net.Http;
+//using System.Net.Http.Json;
+//using System.Linq;
+
+//namespace SadafBI
+//{
+//    class Program
+//    {
+//        static void Main(string[] args)
+//        {
+//            // ایجاد یک نمونه از HttpClient
+//            using (var client = new HttpClient())
+//            {
+//                // افزودن توکن به هدر درخواست
+//                client.DefaultRequestHeaders.Add("X-CLIENT-TOKEN", "b2d0470a-39a2-4310-a0b7-3a9f00309deb");
+
+//                Console.WriteLine("Calling Web API...");
+
+//                // ارسال درخواست به API
+//                var responseTask = client.GetAsync("https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1400/02/01&creationDateFrom=1400/02/20&size=10&page=1");
+//                responseTask.Wait();
+
+//                // بررسی وضعیت درخواست
+//                if (responseTask.IsCompleted)
+//                {
+//                    var result = responseTask.Result;
+//                    result.EnsureSuccessStatusCode(); // بررسی وضعیت درخواست و ایجاد استثناء در صورت خطا
+
+//                    // خواندن اطلاعات از پاسخ
+//                    var customerListTask = result.Content.ReadFromJsonAsync<CustomerListResponse>();
+//                    customerListTask.Wait();
+
+//                    // بررسی وضعیت خواندن اطلاعات
+//                    if (customerListTask.IsCompletedSuccessfully)
+//                    {
+//                        var customerListResponse = customerListTask.Result;
+//                        var customerList = customerListResponse.CustomerList;
+
+//                        // اتصال به دیتابیس و ذخیره اطلاعات
+//                        using (var context = new DataContext())
+//                        {
+//                            if (customerList != null && customerList.Any())
+//                            {
+//                                context.Customers.AddRange(customerList);
+//                                context.SaveChanges();
+//                                Console.WriteLine("Data added to the database successfully.");
+//                            }
+//                            else
+//                            {
+//                                Console.WriteLine("No valid data to add to the database.");
+//                            }
+//                        }
+//                    }
+//                    else
+//                    {
+//                        Console.WriteLine("Failed to read data from the API response.");
+//                    }
+//                }
+//                else
+//                {
+//                    Console.WriteLine("Failed to make a request to the API.");
+//                }
+//            }
+
+//            Console.ReadLine();
+//        }
+//    }
+//}
+
+
+//using System;
+//using System.Net.Http;
+//using System.Net.Http.Json;
+//using System.Linq;
+//using Microsoft.EntityFrameworkCore;
+//using SadafBI.Models;
+//using SadafBI.Data;
+
+//namespace SadafBI
+//{
+//    class Program
+//    {
+//        static void Main(string[] args)
+//        {
+//            using (var context = new DataContext())
+//            {
+//                HttpClient client = new HttpClient();
+//                client.DefaultRequestHeaders.Add("X-CLIENT-TOKEN", "b2d0470a-39a2-4310-a0b7-3a9f00309deb");
+
+//                Console.WriteLine("Calling Web API...");
+//                var responseTask = client.GetAsync("https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1400/02/01&creationDateFrom=1400/02/20&size=100&page=1").Result;
+//                //responseTask.Wait();
+
+//                //if (responseTask.IsCompleted)
+//                //{
+//                //    var result = responseTask.Result;
+//                //    if (result.IsSuccessStatusCode)
+//                //    {
+//                //        var customerListTask = result.Content.ReadFromJsonAsync<CustomerListResponse>();
+//                //        customerListTask.Wait();
+
+//                //        if (customerListTask.IsCompleted)
+//                //        {
+//                //            var customerListResponse = customerListTask.Result;
+//                //            var customerList = customerListResponse.CustomerList;
+
+//                //            if (customerList != null)
+//                //            {
+//                //                // افزودن به دیتابیس
+//                //                context.Customers.AddRange(customerList);
+//                //                context.SaveChanges();
+//                //                Console.WriteLine("Data added to the database successfully.");
+//                //            }
+
+
+//                //            Console.ReadLine();
+//                //        }
+//                //    }
+//                //}
+//            }
+//        }
+//    }
+//}
+
+
+
+
+
+
+//using SadafBI.Data;
+//using SadafBI.Models;
+//using System.Net.Http.Json;
+//using System;
+//using RestSharp;
+//using System.Net;
+
+//namespace SadafBI
+//{
+//    class Program
+//    {
+//        static void Main(string[] args)
+//        {
+
+//            HttpClient client = new HttpClient();
+//            client.DefaultRequestHeaders.Add("X-CLIENT-TOKEN", "b2d0470a-39a2-4310-a0b7-3a9f00309deb");
+//            Console.WriteLine("CallingWebAPI...");
+//            var responseTask = client.GetAsync("https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1400/02/01&creationDateFrom=1400/02/20&size=100&page=1");
+//            responseTask.Wait();
+//            if (responseTask.IsCompleted)
+//            {
+//                var result = responseTask.Result;
+//                if (result.IsSuccessStatusCode)
+//                {
+//                    var messageTask = result.Content.ReadAsStringAsync();
+//                    messageTask.Wait();
+//                    Console.WriteLine("Message from WbbAPI=" + messageTask.Result);
+//                    Console.ReadLine();
+//                }
+//            }
+//        }
+//    }
+//}
+
+
+
+
+
+///********////*****************************************
+//using System;
+//using System.Net.Http;
+//using System.Threading.Tasks;
+
+//class Program
+//{
+//    static async Task Main()
+//    {
+//        await MainAsync();
+//    }
+
+//    static async Task MainAsync()
+//    {
+//        string apiEndpoint = "https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1389/01/01&creationDateFrom=1389/01/01&size=1&page=1";
+
+//        using (HttpClient client = new HttpClient())
+//        {
+//            client.DefaultRequestHeaders.Add("X-CLIENT-TOKEN", "b2d0470a-39a2-4310-a0b7-3a9f00309deb");
+
+//            try
+//            {
+//                var response = await client.GetAsync(apiEndpoint);
+
+//                if (response.IsSuccessStatusCode)
+//                {
+//                    string responseBody = await response.Content.ReadAsStringAsync();
+//                    Console.WriteLine("Status Code: " + response.StatusCode);
+//                    Console.WriteLine("Response Body: " + responseBody);
+//                }
+//                else
+//                {
+//                    Console.WriteLine("Error: " + response.StatusCode);
+//                }
+//            }
+//            catch (Exception ex)
+//            {
+//                Console.WriteLine("Exception: " + ex.Message);
+//            }
+//        }
+//    }
+//}
+
+
+
+
+
+
+
+//using System;
+//using System.Net.Http;
+//using System.Threading.Tasks;
+//using Newtonsoft.Json;
+//using SadafBI.Data;
+//using SadafBI.Models;
+
+//namespace SadafBI
+//{
+//    public class Program
+//    {
+//        public static async Task Main()
+//        {
+//            await MainAsync();
+//        }
+
+//        static async Task MainAsync()
+//        {
+//            using (var httpClient = new HttpClient())
+//            {
+//                httpClient.DefaultRequestHeaders.Add("X-CLIENT-TOKEN", "543ae258-b863-478b-b07c-91ea1478f70f");
+
+//                try
+//                {
+//                    // درخواست اطلاعات از یو ار ال
+//                    var response = await httpClient.GetStringAsync("https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1400/02/01&creationDateFrom=1400/02/20&size=100&page=1");
+
+//                    // دیسریالیزیشن اطلاعات
+//                    var customerListResponse = JsonConvert.DeserializeObject<CustomerListResponse>(response);
+
+//                    if (customerListResponse != null)
+//                    {
+//                        using (var dbContext = new DataContext())
+//                        {
+//                            // تبدیل به مدل‌های اسکیوال
+//                            var sqlCustomerList = customerListResponse.Result?.Select(c => new SqlCustomerList
+//                            {
+//                                customerId = c.customerId,
+//                                nationalCode = c.nationalCode,
+//                                // سایر فیلدها
+
+//                            }).ToList();
+
+//                            if (sqlCustomerList != null)
+//                            {
+//                                // ذخیره در دیتابیس
+//                                dbContext.SqlCustomerLists.AddRange(sqlCustomerList);
+//                                var result = await dbContext.SaveChangesAsync();
+//                                Console.WriteLine("اطلاعات با موفقیت به دیتابیس افزوده شد.");
+//                            }
+//                        }
+//                    }
+//                    else
+//                    {
+//                        Console.WriteLine("درخواست API ناموفق بود یا اطلاعات خالی است.");
+//                    }
+//                }
+//                catch (HttpRequestException ex)
+//                {
+//                    Console.WriteLine($"خطا در برقراری ارتباط با سرور: {ex.Message}");
+//                }
+//            }
+//        }
+//    }
+//}
+
 
 
 

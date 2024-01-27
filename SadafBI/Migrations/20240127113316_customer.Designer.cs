@@ -12,8 +12,8 @@ using SadafBI.Data;
 namespace SadafBI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240123155447_customersList")]
-    partial class customersList
+    [Migration("20240127113316_customer")]
+    partial class customer
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,24 +24,24 @@ namespace SadafBI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("CustomerListResponse", b =>
+            modelBuilder.Entity("SadafBI.Models.CustomerListResponse", b =>
                 {
-                    b.Property<int>("offset")
+                    b.Property<int>("Offset")
                         .HasColumnType("int");
 
-                    b.Property<int>("pageNumber")
+                    b.Property<int>("PageNumber")
                         .HasColumnType("int");
 
-                    b.Property<int>("pageSize")
+                    b.Property<int>("PageSize")
                         .HasColumnType("int");
 
-                    b.Property<int>("total")
+                    b.Property<int>("Total")
                         .HasColumnType("int");
 
                     b.ToTable("Responses");
                 });
 
-            modelBuilder.Entity("SqlCustomergroup", b =>
+            modelBuilder.Entity("SadafBI.Models.SqlCustomergroup", b =>
                 {
                     b.Property<int>("customerGroupId")
                         .ValueGeneratedOnAdd()
@@ -63,7 +63,7 @@ namespace SadafBI.Migrations
                     b.ToTable("Customergroups");
                 });
 
-            modelBuilder.Entity("SqlCustomerList", b =>
+            modelBuilder.Entity("SadafBI.Models.SqlCustomerList", b =>
                 {
                     b.Property<int>("customerId")
                         .ValueGeneratedOnAdd()
@@ -76,7 +76,6 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("baTypeName")
@@ -84,15 +83,12 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("bankAccountId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("bankAccountNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("bankName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("birthCertificationNumber")
@@ -129,7 +125,6 @@ namespace SadafBI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("comexEconomyAccount")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("comexVisitorId")
@@ -141,7 +136,6 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("companyName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("creationDate")
@@ -160,7 +154,6 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("emailAddress")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("eorderStatusId")
@@ -198,7 +191,7 @@ namespace SadafBI.Migrations
                     b.Property<bool>("hasZipFile")
                         .HasColumnType("bit");
 
-                    b.Property<int>("isCollateralStocksCustomer")
+                    b.Property<int?>("isCollateralStocksCustomer")
                         .HasColumnType("int");
 
                     b.Property<int>("isCompany")
@@ -251,11 +244,9 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("phoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("postalCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("provinceCode")
@@ -267,11 +258,9 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("referredBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("registerationNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("sexTypeId")
@@ -285,7 +274,6 @@ namespace SadafBI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("shabaNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("status")
@@ -293,15 +281,12 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("telegramStatusId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("telegramUsername")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("traderCredit")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("customerId");
@@ -309,7 +294,7 @@ namespace SadafBI.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("SqlDomain", b =>
+            modelBuilder.Entity("SadafBI.Models.SqlDomain", b =>
                 {
                     b.Property<int>("domainId")
                         .ValueGeneratedOnAdd()
@@ -331,25 +316,25 @@ namespace SadafBI.Migrations
                     b.ToTable("Domains");
                 });
 
-            modelBuilder.Entity("SqlCustomergroup", b =>
+            modelBuilder.Entity("SadafBI.Models.SqlCustomergroup", b =>
                 {
-                    b.HasOne("SqlCustomerList", null)
-                        .WithMany("customerGroups")
+                    b.HasOne("SadafBI.Models.SqlCustomerList", null)
+                        .WithMany("CustomerGroups")
                         .HasForeignKey("SqlCustomerListcustomerId");
                 });
 
-            modelBuilder.Entity("SqlDomain", b =>
+            modelBuilder.Entity("SadafBI.Models.SqlDomain", b =>
                 {
-                    b.HasOne("SqlCustomerList", null)
-                        .WithMany("domains")
+                    b.HasOne("SadafBI.Models.SqlCustomerList", null)
+                        .WithMany("Domains")
                         .HasForeignKey("SqlCustomerListcustomerId");
                 });
 
-            modelBuilder.Entity("SqlCustomerList", b =>
+            modelBuilder.Entity("SadafBI.Models.SqlCustomerList", b =>
                 {
-                    b.Navigation("customerGroups");
+                    b.Navigation("CustomerGroups");
 
-                    b.Navigation("domains");
+                    b.Navigation("Domains");
                 });
 #pragma warning restore 612, 618
         }

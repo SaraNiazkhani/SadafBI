@@ -4,7 +4,7 @@
 
 namespace SadafBI.Migrations
 {
-    public partial class customersList : Migration
+    public partial class customer : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,20 +15,20 @@ namespace SadafBI.Migrations
                     customerId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     nationalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    companyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    companyName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     firstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     lastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     fatherName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    phoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    phoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     mobileNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    emailAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    emailAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     dlNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     credit = table.Column<long>(type: "bigint", nullable: false),
                     comexCredit = table.Column<int>(type: "int", nullable: true),
                     sfCredit = table.Column<int>(type: "int", nullable: true),
-                    telegramUsername = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    telegramStatusId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    telegramUsername = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    telegramStatusId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     creationDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     branchId = table.Column<int>(type: "int", nullable: false),
                     branchName = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -36,9 +36,9 @@ namespace SadafBI.Migrations
                     customerIdentity = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     birthDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     birthCertificationNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    postalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    registerationNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    postalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    registerationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     bourseAccountName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     accountNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     onlineUsername = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -50,7 +50,7 @@ namespace SadafBI.Migrations
                     eorderStatusId = table.Column<int>(type: "int", nullable: false),
                     sexTypeId = table.Column<int>(type: "int", nullable: false),
                     sexTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    referredBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    referredBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     hasSignSample = table.Column<bool>(type: "bit", nullable: false),
                     hasCustomerPhoto = table.Column<bool>(type: "bit", nullable: false),
                     hasBirthCertificate = table.Column<bool>(type: "bit", nullable: false),
@@ -60,21 +60,21 @@ namespace SadafBI.Migrations
                     hasOfficialAds = table.Column<bool>(type: "bit", nullable: false),
                     comexVisitorId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     mmtpUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    comexEconomyAccount = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    comexEconomyAccount = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isPortfo = table.Column<int>(type: "int", nullable: false),
-                    traderCredit = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    traderCredit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     provinceCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     provinceName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     cityId = table.Column<int>(type: "int", nullable: false),
                     cityCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     cityName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    bankAccountId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    bankAccountNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    shabaNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    bankAccountId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    bankAccountNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    shabaNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     baTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    bankName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    bankName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isStockCreditPurchase = table.Column<int>(type: "int", nullable: false),
-                    isCollateralStocksCustomer = table.Column<int>(type: "int", nullable: false),
+                    isCollateralStocksCustomer = table.Column<int>(type: "int", nullable: true),
                     isProfessionalTrader = table.Column<int>(type: "int", nullable: false),
                     isOtcProfessionalTrader = table.Column<int>(type: "int", nullable: false),
                     comments = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -88,10 +88,10 @@ namespace SadafBI.Migrations
                 name: "Responses",
                 columns: table => new
                 {
-                    pageSize = table.Column<int>(type: "int", nullable: false),
-                    pageNumber = table.Column<int>(type: "int", nullable: false),
-                    offset = table.Column<int>(type: "int", nullable: false),
-                    total = table.Column<int>(type: "int", nullable: false)
+                    PageSize = table.Column<int>(type: "int", nullable: false),
+                    PageNumber = table.Column<int>(type: "int", nullable: false),
+                    Offset = table.Column<int>(type: "int", nullable: false),
+                    Total = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
