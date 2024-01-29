@@ -12,8 +12,8 @@ using SadafBI.Data;
 namespace SadafBI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240127113316_customer")]
-    partial class customer
+    [Migration("20240129130517_UpdateModel")]
+    partial class UpdateModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -76,6 +76,7 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("baTypeName")
@@ -83,12 +84,15 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("bankAccountId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("bankAccountNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("bankName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("birthCertificationNumber")
@@ -125,6 +129,7 @@ namespace SadafBI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("comexEconomyAccount")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("comexVisitorId")
@@ -136,6 +141,7 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("companyName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("creationDate")
@@ -154,6 +160,7 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("emailAddress")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("eorderStatusId")
@@ -244,9 +251,11 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("phoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("postalCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("provinceCode")
@@ -258,9 +267,11 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("referredBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("registerationNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("sexTypeId")
@@ -274,6 +285,7 @@ namespace SadafBI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("shabaNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("status")
@@ -281,12 +293,15 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("telegramStatusId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("telegramUsername")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("traderCredit")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("customerId");

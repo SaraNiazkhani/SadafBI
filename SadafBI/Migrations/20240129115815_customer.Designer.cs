@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SadafBI.Data;
 
@@ -11,9 +12,10 @@ using SadafBI.Data;
 namespace SadafBI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240129115815_customer")]
+    partial class customer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,7 +76,6 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("baTypeName")
@@ -82,15 +83,12 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("bankAccountId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("bankAccountNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("bankName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("birthCertificationNumber")
@@ -127,7 +125,6 @@ namespace SadafBI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("comexEconomyAccount")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("comexVisitorId")
@@ -139,7 +136,6 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("companyName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("creationDate")
@@ -158,7 +154,6 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("emailAddress")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("eorderStatusId")
@@ -169,7 +164,6 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("firstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("hasBirthCertificate")
@@ -221,7 +215,6 @@ namespace SadafBI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("lastName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("mmtpUserId")
@@ -249,11 +242,9 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("phoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("postalCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("provinceCode")
@@ -265,11 +256,9 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("referredBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("registerationNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("sexTypeId")
@@ -283,7 +272,6 @@ namespace SadafBI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("shabaNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("status")
@@ -291,15 +279,12 @@ namespace SadafBI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("telegramStatusId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("telegramUsername")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("traderCredit")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("customerId");
