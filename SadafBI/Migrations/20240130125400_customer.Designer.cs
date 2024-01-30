@@ -12,8 +12,8 @@ using SadafBI.Data;
 namespace SadafBI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240129130517_UpdateModel")]
-    partial class UpdateModel
+    [Migration("20240130125400_customer")]
+    partial class customer
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,23 +24,6 @@ namespace SadafBI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("SadafBI.Models.CustomerListResponse", b =>
-                {
-                    b.Property<int>("Offset")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PageNumber")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PageSize")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Total")
-                        .HasColumnType("int");
-
-                    b.ToTable("Responses");
-                });
-
             modelBuilder.Entity("SadafBI.Models.SqlCustomergroup", b =>
                 {
                     b.Property<int>("customerGroupId")
@@ -49,27 +32,41 @@ namespace SadafBI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("customerGroupId"), 1L, 1);
 
-                    b.Property<int?>("SqlCustomerListcustomerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("customerGroupName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("customerGroupId");
 
-                    b.HasIndex("SqlCustomerListcustomerId");
-
                     b.ToTable("Customergroups");
                 });
 
-            modelBuilder.Entity("SadafBI.Models.SqlCustomerList", b =>
+            modelBuilder.Entity("SadafBI.Models.SqlDomain", b =>
                 {
-                    b.Property<int>("customerId")
+                    b.Property<int>("domainId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("customerId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("domainId"), 1L, 1);
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("domainName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("domainId");
+
+                    b.ToTable("Domains");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("SqlDomain");
+                });
+
+            modelBuilder.Entity("SadafBI.Models.SqlCustomersListModel", b =>
+                {
+                    b.HasBaseType("SadafBI.Models.SqlDomain");
 
                     b.Property<string>("accountNumber")
                         .IsRequired()
@@ -83,9 +80,8 @@ namespace SadafBI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("bankAccountId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("bankAccountId")
+                        .HasColumnType("int");
 
                     b.Property<string>("bankAccountNumber")
                         .IsRequired()
@@ -150,6 +146,12 @@ namespace SadafBI.Migrations
 
                     b.Property<long>("credit")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("customerGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("customerId")
+                        .HasColumnType("int");
 
                     b.Property<string>("customerIdentity")
                         .IsRequired()
@@ -226,13 +228,11 @@ namespace SadafBI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("mmtpUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("mmtpUserId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("mmtpUserStatusId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("mmtpUserStatusId")
+                        .HasColumnType("int");
 
                     b.Property<string>("mobileNumber")
                         .IsRequired()
@@ -300,56 +300,31 @@ namespace SadafBI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("traderCredit")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("customerId");
-
-                    b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("SadafBI.Models.SqlDomain", b =>
-                {
-                    b.Property<int>("domainId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int?>("traderCredit")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("domainId"), 1L, 1);
+                    b.HasIndex("customerGroupId");
 
-                    b.Property<int?>("SqlCustomerListcustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("domainName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("domainId");
-
-                    b.HasIndex("SqlCustomerListcustomerId");
-
-                    b.ToTable("Domains");
+                    b.HasDiscriminator().HasValue("SqlCustomersListModel");
                 });
 
-            modelBuilder.Entity("SadafBI.Models.SqlCustomergroup", b =>
+            modelBuilder.Entity("SadafBI.Models.SqlCustomersListModel", b =>
                 {
-                    b.HasOne("SadafBI.Models.SqlCustomerList", null)
-                        .WithMany("CustomerGroups")
-                        .HasForeignKey("SqlCustomerListcustomerId");
-                });
+                    b.HasOne("SadafBI.Models.SqlCustomergroup", "SqlCustomergroup")
+                        .WithMany()
+                        .HasForeignKey("customerGroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-            modelBuilder.Entity("SadafBI.Models.SqlDomain", b =>
-                {
-                    b.HasOne("SadafBI.Models.SqlCustomerList", null)
-                        .WithMany("Domains")
-                        .HasForeignKey("SqlCustomerListcustomerId");
-                });
+                    b.HasOne("SadafBI.Models.SqlDomain", "SqlDomain")
+                        .WithMany()
+                        .HasForeignKey("domainId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-            modelBuilder.Entity("SadafBI.Models.SqlCustomerList", b =>
-                {
-                    b.Navigation("CustomerGroups");
+                    b.Navigation("SqlCustomergroup");
 
-                    b.Navigation("Domains");
+                    b.Navigation("SqlDomain");
                 });
 #pragma warning restore 612, 618
         }

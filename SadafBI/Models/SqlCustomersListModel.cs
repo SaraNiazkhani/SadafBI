@@ -1,15 +1,13 @@
-﻿
-using System.ComponentModel.DataAnnotations;
-using System.Net.Mail;
-using System.Net;
-using System.Xml.Linq;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SadafBI.Models
 
 {
-    public class SqlCustomerList
+    public class SqlCustomersListModel:SqlDomain
     {
-        [Key]
+     
+        
         public int customerId { get; set; }
         public string nationalCode { get; set; } = "";
         public string companyName { get; set; } = "";
@@ -42,7 +40,7 @@ namespace SadafBI.Models
         public int hasOnlineAccount { get; set; }
         public string modificationDate { get; set; } = "";
         public int isMmtpUser { get; set; }
-        public string mmtpUserStatusId { get; set; } = "";
+        public int? mmtpUserStatusId { get; set; }
         public int isSiteUser { get; set; }
         public int eorderStatusId { get; set; }
         public int sexTypeId { get; set; }
@@ -56,16 +54,16 @@ namespace SadafBI.Models
         public bool hasOfficialGazette { get; set; }
         public bool hasOfficialAds { get; set; }
         public string comexVisitorId { get; set; } = "";
-        public string mmtpUserId { get; set; } = "";
+        public int? mmtpUserId { get; set; } 
         public string comexEconomyAccount { get; set; } = "";
         public int isPortfo { get; set; }
-        public string traderCredit { get; set; } = "";
+        public int? traderCredit { get; set; } 
         public string provinceCode { get; set; } = "";
         public string provinceName { get; set; } = "";
         public int cityId { get; set; }
         public string cityCode { get; set; } = "";
         public string cityName { get; set; } = "";
-        public string bankAccountId { get; set; } = "";
+        public int? bankAccountId { get; set; } 
         public string bankAccountNumber { get; set; } = "";
         public string shabaNumber { get; set; } = "";
         public string baTypeName { get; set; } = "";
@@ -76,8 +74,13 @@ namespace SadafBI.Models
         public int isOtcProfessionalTrader { get; set; }
         public string comments { get; set; } = "";
 
-        public List<SqlDomain> Domains { get; set; }
-        public List<SqlCustomergroup> CustomerGroups { get; set; }
+        [ForeignKey("domainId")]
+        public int domainId { get; set; }
+
+        [ForeignKey("customerGroupId")]
+        public int customerGroupId { get; set; }
+        public virtual SqlDomain SqlDomain { get; set; }
+        public virtual SqlCustomergroup SqlCustomergroup { get; set; }
     }
 
     public class SqlDomain
@@ -91,14 +94,12 @@ namespace SadafBI.Models
     public class SqlCustomergroup
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int customerGroupId { get; set; }
         public string customerGroupName { get; set; } = "";
 
 
     }
-
-
-
 }
 
 

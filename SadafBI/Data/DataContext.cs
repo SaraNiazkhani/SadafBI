@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SadafBI.Models;
 using System;
+using System.Reflection.Emit;
 
 namespace SadafBI.Data
 {
     public class DataContext : DbContext
     {
-        public DbSet<SqlCustomerList> Customers { get; set; }
+        public DbSet<SqlCustomersListModel> Customers { get; set; }
         public DbSet<SqlCustomergroup> Customergroups { get; set; }
         public DbSet<SqlDomain> Domains { get; set; }
 
@@ -18,12 +19,25 @@ namespace SadafBI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+       
 
-            modelBuilder.Entity<SqlCustomerList>().HasKey(c => c.customerId);
-            modelBuilder.Entity<SqlDomain>().HasKey(c => c.domainId);
-            modelBuilder.Entity<SqlCustomergroup>().HasKey(c => c.customerGroupId);
-      
+            modelBuilder.Entity<SqlCustomersListModel>()
+                .Property(c => c.customerGroupId)
+                .ValueGeneratedOnAdd(); // تعیین تولید مقدار خودکار برای کلید اصلی
+            modelBuilder.Entity<SqlCustomersListModel>()
+                             .HasOne(c => c.SqlDomain)
+                             .WithMany()
+                             .HasForeignKey(c => c.domainId)
+                             .OnDelete(DeleteBehavior.Restrict);
+
+  
+
+            modelBuilder.Entity<SqlCustomersListModel>()
+                .HasOne(c => c.SqlCustomergroup)
+                .WithMany()
+                .HasForeignKey(c => c.customerGroupId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
+
