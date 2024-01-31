@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Mail;
 using System.Xml.Linq;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SadafBI.Data;
 using SadafBI.Models;
@@ -14,7 +15,7 @@ namespace SadafBI
         static void Main(string[] args)
         {
             HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Add("X-CLIENT-TOKEN", "392cf770-a23e-4721-b6b5-547f9cd3d51d");
+            client.DefaultRequestHeaders.Add("X-CLIENT-TOKEN", "55dbd74c-dbe8-4222-a62b-502587445088");
 
             Console.WriteLine("Calling Web API...");
             var responseTask = client.GetAsync("https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1390/01/01&creationDateFrom=1390/01/01&size=1&page=1");
@@ -30,19 +31,24 @@ namespace SadafBI
                 var responseContent = result.Content.ReadAsStringAsync().Result;
 
 
+                
                 var apiResponse = JsonConvert.DeserializeObject<APIResponseModel>(responseContent);
 
                 using (var context = new DataContext())
                 {
+                   
+
                     // دریافت مدل مپ شده
                     var mappedData = MappingHelper.MapResultToSqlModel(apiResponse.result[0]);
 
                     // اضافه کردن به دیتابیس
                     context.Customers.Add(mappedData);
 
+
                     // ذخیره تغییرات در دیتابیس
                     context.SaveChanges();
                 }
+
             }
         }
     }

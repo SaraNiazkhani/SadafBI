@@ -39,32 +39,13 @@ namespace SadafBI.Migrations
                     b.ToTable("Customergroups");
                 });
 
-            modelBuilder.Entity("SadafBI.Models.SqlDomain", b =>
+            modelBuilder.Entity("SadafBI.Models.SqlCustomersListModel", b =>
                 {
-                    b.Property<int>("domainId")
+                    b.Property<int>("customerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("domainId"), 1L, 1);
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("domainName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("domainId");
-
-                    b.ToTable("Domains");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("SqlDomain");
-                });
-
-            modelBuilder.Entity("SadafBI.Models.SqlCustomersListModel", b =>
-                {
-                    b.HasBaseType("SadafBI.Models.SqlDomain");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("customerId"), 1L, 1);
 
                     b.Property<string>("accountNumber")
                         .IsRequired()
@@ -146,10 +127,6 @@ namespace SadafBI.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<int>("customerGroupId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("customerId")
                         .HasColumnType("int");
 
                     b.Property<string>("customerIdentity")
@@ -159,6 +136,9 @@ namespace SadafBI.Migrations
                     b.Property<string>("dlNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("domainId")
+                        .HasColumnType("int");
 
                     b.Property<string>("emailAddress")
                         .IsRequired()
@@ -302,28 +282,59 @@ namespace SadafBI.Migrations
                     b.Property<int?>("traderCredit")
                         .HasColumnType("int");
 
+                    b.HasKey("customerId");
+
                     b.HasIndex("customerGroupId");
 
-                    b.HasDiscriminator().HasValue("SqlCustomersListModel");
+                    b.HasIndex("domainId");
+
+                    b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("SadafBI.Models.SqlDomain", b =>
+                {
+                    b.Property<int>("domainId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("domainId"), 1L, 1);
+
+                    b.Property<string>("domainName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("domainId");
+
+                    b.ToTable("Domains");
                 });
 
             modelBuilder.Entity("SadafBI.Models.SqlCustomersListModel", b =>
                 {
                     b.HasOne("SadafBI.Models.SqlCustomergroup", "SqlCustomergroup")
-                        .WithMany()
+                        .WithMany("Customers")
                         .HasForeignKey("customerGroupId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SadafBI.Models.SqlDomain", "SqlDomain")
-                        .WithMany()
+                        .WithMany("Customers")
                         .HasForeignKey("domainId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("SqlCustomergroup");
 
                     b.Navigation("SqlDomain");
+                });
+
+            modelBuilder.Entity("SadafBI.Models.SqlCustomergroup", b =>
+                {
+                    b.Navigation("Customers");
+                });
+
+            modelBuilder.Entity("SadafBI.Models.SqlDomain", b =>
+                {
+                    b.Navigation("Customers");
                 });
 #pragma warning restore 612, 618
         }

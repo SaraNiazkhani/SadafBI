@@ -19,24 +19,22 @@ namespace SadafBI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-       
+            modelBuilder.Entity<SqlCustomersListModel>().HasKey(c => c.customerId);
 
-            modelBuilder.Entity<SqlCustomersListModel>()
-                .Property(c => c.customerGroupId)
-                .ValueGeneratedOnAdd(); // تعیین تولید مقدار خودکار برای کلید اصلی
+
             modelBuilder.Entity<SqlCustomersListModel>()
                              .HasOne(c => c.SqlDomain)
-                             .WithMany()
-                             .HasForeignKey(c => c.domainId)
-                             .OnDelete(DeleteBehavior.Restrict);
+                             .WithMany(b=>b.Customers)
+                             .HasForeignKey(c => c.domainId);
+                           
 
-  
+
 
             modelBuilder.Entity<SqlCustomersListModel>()
                 .HasOne(c => c.SqlCustomergroup)
-                .WithMany()
-                .HasForeignKey(c => c.customerGroupId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .WithMany(b => b.Customers)
+                .HasForeignKey(c => c.customerGroupId);
+               
         }
     }
 }

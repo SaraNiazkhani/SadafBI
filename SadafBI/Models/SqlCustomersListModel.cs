@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SadafBI.Models
 
 {
-    public class SqlCustomersListModel:SqlDomain
+    public class SqlCustomersListModel
     {
-     
-        
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int customerId { get; set; }
         public string nationalCode { get; set; } = "";
         public string companyName { get; set; } = "";
@@ -74,20 +74,23 @@ namespace SadafBI.Models
         public int isOtcProfessionalTrader { get; set; }
         public string comments { get; set; } = "";
 
-        [ForeignKey("domainId")]
+        
         public int domainId { get; set; }
 
-        [ForeignKey("customerGroupId")]
+    
         public int customerGroupId { get; set; }
-        public virtual SqlDomain SqlDomain { get; set; }
-        public virtual SqlCustomergroup SqlCustomergroup { get; set; }
+
+        public  SqlDomain SqlDomain { get; set; }
+        public SqlCustomergroup SqlCustomergroup { get; set; }
     }
 
     public class SqlDomain
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int domainId { get; set; }
         public string domainName { get; set; } = "";
+        public ICollection<SqlCustomersListModel> Customers { get; set; }
 
     }
 
@@ -97,6 +100,7 @@ namespace SadafBI.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int customerGroupId { get; set; }
         public string customerGroupName { get; set; } = "";
+        public ICollection<SqlCustomersListModel> Customers { get; set; }
 
 
     }
