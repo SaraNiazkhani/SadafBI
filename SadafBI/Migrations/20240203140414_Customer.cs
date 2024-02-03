@@ -4,7 +4,7 @@
 
 namespace SadafBI.Migrations
 {
-    public partial class customers : Migration
+    public partial class Customer : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

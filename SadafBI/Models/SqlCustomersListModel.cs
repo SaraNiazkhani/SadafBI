@@ -19,6 +19,7 @@ namespace SadafBI.Models
         public string emailAddress { get; set; } = "";
         public string dlNumber { get; set; } = "";
         public string status { get; set; } = "";
+        
         public long credit { get; set; }
         public int? comexCredit { get; set; }
         public int? sfCredit { get; set; }

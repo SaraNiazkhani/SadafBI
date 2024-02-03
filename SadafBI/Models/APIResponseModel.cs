@@ -1,4 +1,6 @@
-﻿namespace SadafBI.Models
+﻿using Microsoft.Extensions.Logging;
+
+namespace SadafBI.Models
 {
 
 
@@ -24,9 +26,9 @@
         public string emailAddress { get; set; }
         public string dlNumber { get; set; }
         public string status { get; set; }
-        public int credit { get; set; }
-        public int? comexCredit { get; set; }
-        public int? sfCredit { get; set; }
+        public long? credit { get; set; }
+        public long? comexCredit { get; set; }
+        public long? sfCredit { get; set; }
         public object telegramUsername { get; set; }
         public object telegramStatusId { get; set; }
         public string creationDate { get; set; }
@@ -64,7 +66,7 @@
         public int? mmtpUserId { get; set; }
         public string comexEconomyAccount { get; set; }
         public int isPortfo { get; set; }
-        public int? traderCredit { get; set; }
+        public long? traderCredit { get; set; }
         public string provinceCode { get; set; }
         public string provinceName { get; set; }
         public int cityId { get; set; }

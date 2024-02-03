@@ -12,8 +12,8 @@ using SadafBI.Data;
 namespace SadafBI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240203104816_customers")]
-    partial class customers
+    [Migration("20240203140414_Customer")]
+    partial class Customer
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
