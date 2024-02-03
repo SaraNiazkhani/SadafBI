@@ -4,44 +4,45 @@
 
 namespace SadafBI.Migrations
 {
-    public partial class customer : Migration
+    public partial class Customers : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("SET IDENTITY_INSERT Customergroups OFF;");
-            migrationBuilder.Sql("SET IDENTITY_INSERT SqlDomain OFF;");
             migrationBuilder.CreateTable(
                 name: "Customergroups",
                 columns: table => new
                 {
-                    customerGroupId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    customerGroupId = table.Column<int>(type: "int", nullable: false),
                     customerGroupName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customergroups", x => x.customerGroupId);
+                    table.PrimaryKey("PK_Customergroups", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Domains",
                 columns: table => new
                 {
-                    domainId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    domainId = table.Column<int>(type: "int", nullable: false),
                     domainName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Domains", x => x.domainId);
+                    table.PrimaryKey("PK_Domains", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Customers",
                 columns: table => new
                 {
-                    customerId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    customerId = table.Column<int>(type: "int", nullable: false),
                     nationalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     companyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     firstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -106,35 +107,35 @@ namespace SadafBI.Migrations
                     isProfessionalTrader = table.Column<int>(type: "int", nullable: false),
                     isOtcProfessionalTrader = table.Column<int>(type: "int", nullable: false),
                     comments = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    domainId = table.Column<int>(type: "int", nullable: false),
-                    customerGroupId = table.Column<int>(type: "int", nullable: false)
+                    domain_Id = table.Column<int>(type: "int", nullable: false),
+                    customerGroup_Id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customers", x => x.customerId);
+                    table.PrimaryKey("PK_Customers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Customers_Customergroups_customerGroupId",
-                        column: x => x.customerGroupId,
+                        name: "FK_Customers_Customergroups_customerGroup_Id",
+                        column: x => x.customerGroup_Id,
                         principalTable: "Customergroups",
-                        principalColumn: "customerGroupId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Customers_Domains_domainId",
-                        column: x => x.domainId,
+                        name: "FK_Customers_Domains_domain_Id",
+                        column: x => x.domain_Id,
                         principalTable: "Domains",
-                        principalColumn: "domainId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Customers_customerGroupId",
+                name: "IX_Customers_customerGroup_Id",
                 table: "Customers",
-                column: "customerGroupId");
+                column: "customerGroup_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Customers_domainId",
+                name: "IX_Customers_domain_Id",
                 table: "Customers",
-                column: "domainId");
+                column: "domain_Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

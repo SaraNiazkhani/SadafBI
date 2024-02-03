@@ -19,13 +19,18 @@ namespace SadafBI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<SqlCustomersListModel>().HasKey(c => c.customerId);
+            modelBuilder.Entity<SqlCustomersListModel>().HasKey(c => c.Id);
+            modelBuilder.Entity<SqlCustomergroup>()
+    .HasKey(c => c.Id);
+            modelBuilder.Entity<SqlDomain>()
+    .HasKey(c => c.Id);
+
 
 
             modelBuilder.Entity<SqlCustomersListModel>()
                              .HasOne(c => c.SqlDomain)
                              .WithMany(b=>b.Customers)
-                             .HasForeignKey(c => c.domainId);
+                             .HasForeignKey(c => c.domain_Id);
                            
 
 
@@ -33,7 +38,7 @@ namespace SadafBI.Data
             modelBuilder.Entity<SqlCustomersListModel>()
                 .HasOne(c => c.SqlCustomergroup)
                 .WithMany(b => b.Customers)
-                .HasForeignKey(c => c.customerGroupId);
+                .HasForeignKey(c => c.customerGroup_Id);
                
         }
     }

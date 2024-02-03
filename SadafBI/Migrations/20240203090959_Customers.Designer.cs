@@ -12,8 +12,8 @@ using SadafBI.Data;
 namespace SadafBI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240131123153_customer")]
-    partial class customer
+    [Migration("20240203090959_Customers")]
+    partial class Customers
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,28 +26,31 @@ namespace SadafBI.Migrations
 
             modelBuilder.Entity("SadafBI.Models.SqlCustomergroup", b =>
                 {
-                    b.Property<int>("customerGroupId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("customerGroupId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("customerGroupId")
+                        .HasColumnType("int");
 
                     b.Property<string>("customerGroupName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("customerGroupId");
+                    b.HasKey("Id");
 
                     b.ToTable("Customergroups");
                 });
 
             modelBuilder.Entity("SadafBI.Models.SqlCustomersListModel", b =>
                 {
-                    b.Property<int>("customerId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("customerId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("accountNumber")
                         .IsRequired()
@@ -128,7 +131,10 @@ namespace SadafBI.Migrations
                     b.Property<long>("credit")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("customerGroupId")
+                    b.Property<int>("customerGroup_Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("customerId")
                         .HasColumnType("int");
 
                     b.Property<string>("customerIdentity")
@@ -139,7 +145,7 @@ namespace SadafBI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("domainId")
+                    b.Property<int>("domain_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("emailAddress")
@@ -284,28 +290,31 @@ namespace SadafBI.Migrations
                     b.Property<int?>("traderCredit")
                         .HasColumnType("int");
 
-                    b.HasKey("customerId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("customerGroupId");
+                    b.HasIndex("customerGroup_Id");
 
-                    b.HasIndex("domainId");
+                    b.HasIndex("domain_Id");
 
                     b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("SadafBI.Models.SqlDomain", b =>
                 {
-                    b.Property<int>("domainId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("domainId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("domainId")
+                        .HasColumnType("int");
 
                     b.Property<string>("domainName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("domainId");
+                    b.HasKey("Id");
 
                     b.ToTable("Domains");
                 });
@@ -314,13 +323,13 @@ namespace SadafBI.Migrations
                 {
                     b.HasOne("SadafBI.Models.SqlCustomergroup", "SqlCustomergroup")
                         .WithMany("Customers")
-                        .HasForeignKey("customerGroupId")
+                        .HasForeignKey("customerGroup_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SadafBI.Models.SqlDomain", "SqlDomain")
                         .WithMany("Customers")
-                        .HasForeignKey("domainId")
+                        .HasForeignKey("domain_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

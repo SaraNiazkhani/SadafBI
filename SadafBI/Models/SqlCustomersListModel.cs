@@ -7,7 +7,7 @@ namespace SadafBI.Models
     public class SqlCustomersListModel
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         public int customerId { get; set; }
         public string nationalCode { get; set; } = "";
         public string companyName { get; set; } = "";
@@ -75,10 +75,10 @@ namespace SadafBI.Models
         public string comments { get; set; } = "";
 
         
-        public int domainId { get; set; }
+        public int domain_Id { get; set; }
 
     
-        public int customerGroupId { get; set; }
+        public int customerGroup_Id { get; set; }
 
         public  SqlDomain SqlDomain { get; set; }
         public SqlCustomergroup SqlCustomergroup { get; set; }
@@ -87,7 +87,7 @@ namespace SadafBI.Models
     public class SqlDomain
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         public int domainId { get; set; }
         public string domainName { get; set; } = "";
         public ICollection<SqlCustomersListModel> Customers { get; set; }
@@ -97,7 +97,7 @@ namespace SadafBI.Models
     public class SqlCustomergroup
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         public int customerGroupId { get; set; }
         public string customerGroupName { get; set; } = "";
         public ICollection<SqlCustomersListModel> Customers { get; set; }
