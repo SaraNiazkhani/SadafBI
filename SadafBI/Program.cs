@@ -18,7 +18,7 @@ namespace SadafBI
             client.DefaultRequestHeaders.Add("X-CLIENT-TOKEN", "f445797e-a6b8-4f64-8e54-893c5722ebbd");
 
             Console.WriteLine("Calling Web API...");
-            var responseTask = client.GetAsync("https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1390/01/01&creationDateFrom=1390/01/01&size=1&page=1");
+            var responseTask = client.GetAsync("https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1400/01/01&creationDateFrom=1400/01/01&size=10&page=1");
             responseTask.Wait();
 
             if (responseTask.IsCompleted)
