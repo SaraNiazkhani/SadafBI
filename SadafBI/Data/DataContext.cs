@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SadafBI.Models;
+using SadafBI.CustomersList.Models;
+using SadafBI.SeperateTransactionInformation.Models;
 using System;
 using System.Reflection.Emit;
 
@@ -10,7 +11,7 @@ namespace SadafBI.Data
         public DbSet<SqlCustomersListModel> Customers { get; set; }
         public DbSet<SqlCustomergroup> Customergroups { get; set; }
         public DbSet<SqlDomain> Domains { get; set; }
-
+        public DbSet<SqlSeparateTransactionModel> SeparateTransaction { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -20,10 +21,9 @@ namespace SadafBI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<SqlCustomersListModel>().HasKey(c => c.Id);
-            modelBuilder.Entity<SqlCustomergroup>()
-    .HasKey(c => c.Id);
-            modelBuilder.Entity<SqlDomain>()
-    .HasKey(c => c.Id);
+            modelBuilder.Entity<SqlCustomergroup>().HasKey(c => c.Id);
+            modelBuilder.Entity<SqlDomain>().HasKey(c => c.Id);
+            modelBuilder.Entity<SqlSeparateTransactionModel>().HasKey(c => c.Id);
 
 
 

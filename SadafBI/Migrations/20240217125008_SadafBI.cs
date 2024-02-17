@@ -4,7 +4,7 @@
 
 namespace SadafBI.Migrations
 {
-    public partial class Customer : Migration
+    public partial class SadafBI : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -34,6 +34,47 @@ namespace SadafBI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Domains", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SeparateTransaction",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    isRight = table.Column<int>(type: "int", nullable: false),
+                    customerId = table.Column<int>(type: "int", nullable: false),
+                    dbsAccountNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    customerFullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    parentCustomerId = table.Column<int>(type: "int", nullable: true),
+                    parentCustomerFullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    transactionDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    isAPurchase = table.Column<int>(type: "int", nullable: true),
+                    instrumentBourseAccount = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    insMaxLcode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    quantity = table.Column<int>(type: "int", nullable: true),
+                    price = table.Column<int>(type: "int", nullable: true),
+                    interest = table.Column<int>(type: "int", nullable: true),
+                    development = table.Column<int>(type: "int", nullable: true),
+                    bourseCo = table.Column<int>(type: "int", nullable: true),
+                    bourseOrg = table.Column<int>(type: "int", nullable: true),
+                    depositCo = table.Column<int>(type: "int", nullable: true),
+                    itManagement = table.Column<int>(type: "int", nullable: true),
+                    facility = table.Column<int>(type: "int", nullable: true),
+                    tax = table.Column<int>(type: "int", nullable: true),
+                    branchId = table.Column<int>(type: "int", nullable: true),
+                    branchName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    bourseReference = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    bourseAccountText = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    dlNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    isOtc = table.Column<int>(type: "int", nullable: true),
+                    postTradeTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    cbranchId = table.Column<int>(type: "int", nullable: true),
+                    cbranchName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SeparateTransaction", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -142,6 +183,9 @@ namespace SadafBI.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "SeparateTransaction");
 
             migrationBuilder.DropTable(
                 name: "Customergroups");

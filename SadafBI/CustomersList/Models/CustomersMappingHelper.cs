@@ -1,8 +1,8 @@
-﻿namespace SadafBI.Models
+﻿namespace SadafBI.CustomersList.Models
 {
-    public class MappingHelper
+    public class CustomersMappingHelper
     {
-        public static SqlCustomersListModel MapResultToSqlModel(Result result)   
+        public static SqlCustomersListModel MapResultToSqlModel(Result result)
         {
             var sqlCustomer = new SqlCustomersListModel
             {
@@ -20,7 +20,7 @@
                 status = result.status ?? "",
                 credit = result.credit.HasValue ? (long)result.credit : 0,
                 comexCredit = (int?)result.comexCredit,
-                sfCredit = (int?) result.sfCredit,
+                sfCredit = (int?)result.sfCredit,
                 telegramUsername = result.telegramUsername?.ToString() ?? "",
                 telegramStatusId = result.telegramStatusId?.ToString() ?? "",
                 creationDate = result.creationDate ?? "",

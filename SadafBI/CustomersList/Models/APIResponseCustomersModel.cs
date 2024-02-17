@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace SadafBI.Models
+namespace SadafBI.CustomersList.Models
 {
 
 
-    public class APIResponseModel
+    public class APIResponseCustomersModel
     {
         public Result[] result { get; set; }
         public int pageSize { get; set; }
