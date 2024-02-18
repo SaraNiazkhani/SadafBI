@@ -13,72 +13,66 @@ namespace SadafBI
         static void Main(string[] args)
         {
             HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Add("X-CLIENT-TOKEN", "854f1489-9bad-4f59-b945-b8d630441f4d");
+            client.DefaultRequestHeaders.Add("X-CLIENT-TOKEN", "85d010ea-bc18-48ae-8a5b-9800dd92c966");
 
             Console.WriteLine("Calling Web API...");
-            var responseTask = client.GetAsync("https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1390/01/01&creationDateFrom=1390/01/01&size=10000&page=8");
-            responseTask.Wait();
+            //var responseTask = client.GetAsync("https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1390/01/01&creationDateFrom=1390/01/01&size=10000&page=8");
+            //responseTask.Wait();
 
-            if (responseTask.IsCompleted)
-            {
-                var result = responseTask.Result;
-                result.EnsureSuccessStatusCode();
-
-
-
-                var responseContent = result.Content.ReadAsStringAsync().Result;
-
-
-                var settings = new JsonSerializerSettings
-                {
-                    DefaultValueHandling = DefaultValueHandling.Populate
-                };
-
-                var apiResponse = JsonConvert.DeserializeObject<APIResponseCustomersModel>(responseContent, settings);
-
-
-                using (var context = new DataContext())
-                {
-                    var customerUpdater = new CustomerUpdater();
-                    foreach (var resultItem in apiResponse.result)
-                    {
-                        var existingCustomer = context.Customers.FirstOrDefault(c => c.customerId == resultItem.customerId);
-                        if (existingCustomer != null)
-                        {
-                            CustomerUpdater.UpdateCustomer(existingCustomer, resultItem);
-                        }
-                        else
-                        {
-                            var mappedData = CustomersMappingHelper.MapResultToSqlModel(resultItem);
-                            context.Customers.Add(mappedData);
-                        }
-                    }
-                    context.SaveChanges();
-                }
-
-            }
+            //if (responseTask.IsCompleted)
+            //{
+            //    var result = responseTask.Result;
+            //    result.EnsureSuccessStatusCode();
 
 
 
+            //    var responseContent = result.Content.ReadAsStringAsync().Result;
 
 
-            var startDate = new DateTime(1402, 11, 23); // تاریخ شروع مورد نظر
-            var endDate = new DateTime(1402, 11, 23); // تاریخ پایان مورد نظر (یک روز بعد از شروع)
-            var endDateMonth = new DateTime(1402 / 11 / 01);
+            //    var settings = new JsonSerializerSettings
+            //    {
+            //        DefaultValueHandling = DefaultValueHandling.Populate
+            //    };
+
+            //    var apiResponse = JsonConvert.DeserializeObject<APIResponseCustomersModel>(responseContent, settings);
+
+
+            //    using (var context = new DataContext())
+            //    {
+            //        var customerUpdater = new CustomerUpdater();
+            //        foreach (var resultItem in apiResponse.result)
+            //        {
+            //            var existingCustomer = context.Customers.FirstOrDefault(c => c.customerId == resultItem.customerId);
+            //            if (existingCustomer != null)
+            //            {
+            //                CustomerUpdater.UpdateCustomer(existingCustomer, resultItem);
+            //            }
+            //            else
+            //            {
+            //                var mappedData = CustomersMappingHelper.MapResultToSqlModel(resultItem);
+            //                context.Customers.Add(mappedData);
+            //            }
+            //        }
+            //        context.SaveChanges();
+            //    }
+
+            //}
+          
+            var startDate = new DateTime(1402,01,30); // تاریخ شروع مورد نظر
+
+            var endDate = new DateTime(1402,01,30); // تاریخ پایان مورد نظر (یک روز بعد از شروع)
+            var endDateMonth = new DateTime(1402,01,01); // تاریخ شروع از 1 ژانویه 1402
+                                                           // تاریخ شروع ماه برای اولین بار
             while (startDate >= endDateMonth)
             {
                 var responseTransactionTask = client.GetAsync($"https://api.irbroker.com/api/v1/transactions/separated?dsCode=765&startDate={startDate:yyyy/MM/dd}&endDate={endDate:yyyy/MM/dd}&size=20000&page=1");
-            ;
-            responseTransactionTask.Wait();
+                responseTransactionTask.Wait();
                 if (responseTransactionTask.IsCompleted)
                 {
                     var Result = responseTransactionTask.Result;
                     Result.EnsureSuccessStatusCode();
 
-
-
                     var ResponseContent = Result.Content.ReadAsStringAsync().Result;
-
 
                     var settings = new JsonSerializerSettings
                     {
@@ -88,7 +82,6 @@ namespace SadafBI
                     var apiResponse = JsonConvert.DeserializeObject<APIResponseTransactionModel>(ResponseContent, settings);
                     using (var context = new DataContext())
                     {
-
                         foreach (var resultItem in apiResponse.result)
                         {
                             // دریافت مدل مپ شده
@@ -100,16 +93,69 @@ namespace SadafBI
 
                         // ذخیره تغییرات در دیتابیس
                         context.SaveChanges();
-
                     }
-            startDate = startDate.AddDays(-1);
-            endDate = endDate.AddDays(-1);
+
+                    startDate = startDate.AddDays(-1);
+                    endDate = endDate.AddDays(-1);
                 }
             }
         }
-
     }
 }
+
+
+
+        //    var startDate = new DateTime(1402, 08, 29); // تاریخ شروع مورد نظر
+        //    var endDate = new DateTime(1402, 08, 29); // تاریخ پایان مورد نظر (یک روز بعد از شروع)
+        //    var endDateMonth = new DateTime(1402,08 , 01);
+        //    if(startDate >= endDateMonth)
+        //    {
+        //        var responseTransactionTask = client.GetAsync($"https://api.irbroker.com/api/v1/transactions/separated?dsCode=765&startDate={startDate:yyyy/MM/dd}&endDate={endDate:yyyy/MM/dd}&size=20000&page=1");
+            
+            
+        //        responseTransactionTask.Wait();
+        //        if (responseTransactionTask.IsCompleted)
+        //        {
+        //            var Result = responseTransactionTask.Result;
+        //            Result.EnsureSuccessStatusCode();
+
+
+
+        //            var ResponseContent = Result.Content.ReadAsStringAsync().Result;
+
+
+        //            var settings = new JsonSerializerSettings
+        //            {
+        //                DefaultValueHandling = DefaultValueHandling.Populate
+        //            };
+
+        //            var apiResponse = JsonConvert.DeserializeObject<APIResponseTransactionModel>(ResponseContent, settings);
+        //            using (var context = new DataContext())
+        //            {
+
+        //                foreach (var resultItem in apiResponse.result)
+        //                {
+        //                    // دریافت مدل مپ شده
+        //                    var mappedData2 = TransactionMappingHelper.MapResultsToSqlModel(resultItem);
+
+        //                    // اضافه کردن به دیتابیس
+        //                    context.SeparateTransaction.Add(mappedData2);
+        //                }
+
+        //                // ذخیره تغییرات در دیتابیس
+        //                context.SaveChanges();
+
+        //            }
+        //            startDate = startDate.AddDays(-1);
+        //             endDate = endDate.AddDays(-1);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("endDateMonth...");
+        //    }
+        //}
+
 
 
 // Update the existing record

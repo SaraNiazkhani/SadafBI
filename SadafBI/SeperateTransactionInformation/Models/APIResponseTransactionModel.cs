@@ -38,7 +38,7 @@ namespace SadafBI.SeperateTransactionInformation.Models
             public int depositCo { get; set; }
             public int itManagement { get; set; }
             public int facility { get; set; }
-            public int tax { get; set; }
+            public long tax { get; set; }
             public int branchId { get; set; }
             public string branchName { get; set; }
             public string bourseReference { get; set; }
