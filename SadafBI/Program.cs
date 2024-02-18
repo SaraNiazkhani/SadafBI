@@ -16,48 +16,48 @@ namespace SadafBI
             client.DefaultRequestHeaders.Add("X-CLIENT-TOKEN", "85d010ea-bc18-48ae-8a5b-9800dd92c966");
 
             Console.WriteLine("Calling Web API...");
-            //var responseTask = client.GetAsync("https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1390/01/01&creationDateFrom=1390/01/01&size=10000&page=8");
-            //responseTask.Wait();
+            var responseTask = client.GetAsync("https://api.irbroker.com/api/v1/listCustomers?dsCode=765&modificationDateFrom=1390/01/01&creationDateFrom=1390/01/01&size=10000&page=8");
+            responseTask.Wait();
 
-            //if (responseTask.IsCompleted)
-            //{
-            //    var result = responseTask.Result;
-            //    result.EnsureSuccessStatusCode();
-
-
-
-            //    var responseContent = result.Content.ReadAsStringAsync().Result;
+            if (responseTask.IsCompleted)
+            {
+                var result = responseTask.Result;
+                result.EnsureSuccessStatusCode();
 
 
-            //    var settings = new JsonSerializerSettings
-            //    {
-            //        DefaultValueHandling = DefaultValueHandling.Populate
-            //    };
 
-            //    var apiResponse = JsonConvert.DeserializeObject<APIResponseCustomersModel>(responseContent, settings);
+                var responseContent = result.Content.ReadAsStringAsync().Result;
 
 
-            //    using (var context = new DataContext())
-            //    {
-            //        var customerUpdater = new CustomerUpdater();
-            //        foreach (var resultItem in apiResponse.result)
-            //        {
-            //            var existingCustomer = context.Customers.FirstOrDefault(c => c.customerId == resultItem.customerId);
-            //            if (existingCustomer != null)
-            //            {
-            //                CustomerUpdater.UpdateCustomer(existingCustomer, resultItem);
-            //            }
-            //            else
-            //            {
-            //                var mappedData = CustomersMappingHelper.MapResultToSqlModel(resultItem);
-            //                context.Customers.Add(mappedData);
-            //            }
-            //        }
-            //        context.SaveChanges();
-            //    }
+                var settings = new JsonSerializerSettings
+                {
+                    DefaultValueHandling = DefaultValueHandling.Populate
+                };
 
-            //}
-          
+                var apiResponse = JsonConvert.DeserializeObject<APIResponseCustomersModel>(responseContent, settings);
+
+
+                using (var context = new DataContext())
+                {
+                    var customerUpdater = new CustomerUpdater();
+                    foreach (var resultItem in apiResponse.result)
+                    {
+                        var existingCustomer = context.Customers.FirstOrDefault(c => c.customerId == resultItem.customerId);
+                        if (existingCustomer != null)
+                        {
+                            CustomerUpdater.UpdateCustomer(existingCustomer, resultItem);
+                        }
+                        else
+                        {
+                            var mappedData = CustomersMappingHelper.MapResultToSqlModel(resultItem);
+                            context.Customers.Add(mappedData);
+                        }
+                    }
+                    context.SaveChanges();
+                }
+
+            }
+
             var startDate = new DateTime(1402,01,30); // تاریخ شروع مورد نظر
 
             var endDate = new DateTime(1402,01,30); // تاریخ پایان مورد نظر (یک روز بعد از شروع)
