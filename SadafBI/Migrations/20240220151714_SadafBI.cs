@@ -23,6 +23,44 @@ namespace SadafBI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CustomerStock",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    bourseAccount = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    bQty = table.Column<int>(type: "int", nullable: false),
+                    bFee = table.Column<int>(type: "int", nullable: false),
+                    bcBasis = table.Column<long>(type: "bigint", nullable: false),
+                    bProfit = table.Column<long>(type: "bigint", nullable: false),
+                    bDps = table.Column<int>(type: "int", nullable: false),
+                    sumRecapQty = table.Column<int>(type: "int", nullable: false),
+                    sumIpoQty = table.Column<int>(type: "int", nullable: false),
+                    sumCancelIpoQty = table.Column<int>(type: "int", nullable: false),
+                    convertToStock = table.Column<int>(type: "int", nullable: false),
+                    convertFromRight = table.Column<int>(type: "int", nullable: false),
+                    pQty = table.Column<int>(type: "int", nullable: false),
+                    pFee = table.Column<int>(type: "int", nullable: false),
+                    pcBasis = table.Column<long>(type: "bigint", nullable: false),
+                    sQty = table.Column<int>(type: "int", nullable: false),
+                    actualProfit = table.Column<long>(type: "bigint", nullable: false),
+                    rQty = table.Column<int>(type: "int", nullable: false),
+                    sumSalable = table.Column<int>(type: "int", nullable: false),
+                    price = table.Column<int>(type: "int", nullable: false),
+                    currentValue = table.Column<long>(type: "bigint", nullable: false),
+                    potentialProfitWe = table.Column<long>(type: "bigint", nullable: false),
+                    totalProfit = table.Column<long>(type: "bigint", nullable: false),
+                    pDps = table.Column<int>(type: "int", nullable: false),
+                    twrReturn = table.Column<int>(type: "int", nullable: false),
+                    bourseAccountName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    insMaxLCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerStock", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Domains",
                 columns: table => new
                 {
@@ -61,7 +99,7 @@ namespace SadafBI.Migrations
                     depositCo = table.Column<int>(type: "int", nullable: true),
                     itManagement = table.Column<int>(type: "int", nullable: true),
                     facility = table.Column<int>(type: "int", nullable: true),
-                    tax = table.Column<int>(type: "int", nullable: true),
+                    tax = table.Column<long>(type: "bigint", nullable: true),
                     branchId = table.Column<int>(type: "int", nullable: true),
                     branchName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     bourseReference = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -183,6 +221,9 @@ namespace SadafBI.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "CustomerStock");
 
             migrationBuilder.DropTable(
                 name: "SeparateTransaction");

@@ -12,8 +12,8 @@ using SadafBI.Data;
 namespace SadafBI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240217125008_SadafBI")]
-    partial class SadafBI
+    [Migration("20240228063406_ChangeMyVariables")]
+    partial class ChangeMyVariables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -319,6 +319,100 @@ namespace SadafBI.Migrations
                     b.ToTable("Domains");
                 });
 
+            modelBuilder.Entity("SadafBI.CustomerStockStatus.Models.SqlCustomerStock", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<long>("actualProfit")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("bDps")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("bFee")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("bProfit")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("bQty")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("bcBasis")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("bourseAccount")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("bourseAccountName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("convertFromRight")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("convertToStock")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("currentValue")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("insMaxLCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("pDps")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("pFee")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("pQty")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("pcBasis")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("potentialProfitWe")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("price")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("rQty")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("sQty")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("sumCancelIpoQty")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("sumIpoQty")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("sumRecapQty")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("sumSalable")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("totalProfit")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("twrReturn")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CustomerStock");
+                });
+
             modelBuilder.Entity("SadafBI.SeperateTransactionInformation.Models.SqlSeparateTransactionModel", b =>
                 {
                     b.Property<int>("Id")
@@ -419,8 +513,8 @@ namespace SadafBI.Migrations
                     b.Property<int?>("quantity")
                         .HasColumnType("int");
 
-                    b.Property<int?>("tax")
-                        .HasColumnType("int");
+                    b.Property<long?>("tax")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("transactionDate")
                         .IsRequired()
