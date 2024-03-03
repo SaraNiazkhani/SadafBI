@@ -16,9 +16,12 @@ namespace SadafBI.Data
         public DbSet<SqlCustomerStock> CustomerStock { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Server=172.18.30.3;User ID=BI;Password=S@D@Fbi#R@dman1403;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False;Database=SadafBI;");
-            //optionsBuilder.UseSqlServer("Server=Data Source=172.18.30.3;User ID=BI;Password=S@D@Fbi#R@dman1403;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False;Database=SadafBI;Trusted_Connection=True;");
+            if (!optionsBuilder.IsConfigured)
+            {
+                base.OnConfiguring(optionsBuilder);
+                //optionsBuilder.UseSqlServer("Server=.;Database=SadafBI;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=172.18.30.3;Database=SadafBI;User Id=BI;Password=S@D@Fbi#R@dman1403;");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
