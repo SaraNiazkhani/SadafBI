@@ -33,6 +33,7 @@ namespace SadafBI
 
             //    var settings = new JsonSerializerSettings
             //    {
+
             //        DefaultValueHandling = DefaultValueHandling.Populate
             //    };
 
